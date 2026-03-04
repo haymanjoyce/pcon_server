@@ -63,7 +63,7 @@ This is **not** an application repo. Do not put application code here.
 | npm | 11.10.1 |
 | Python | 3.12.3 |
 | Git | 2.43.0 |
-| Claude Code | 2.1.52+ |
+| Claude Code | 2.1.66 |
 
 ---
 
