@@ -6,7 +6,7 @@ This file provides persistent context for Claude Code. Read it at the start of e
 
 ## Purpose
 
-This repo documents the configuration and provisioning of the Hetzner VPS that hosts `pcon_app`. It contains setup scripts and hardening scripts to allow the server to be fully reprovisioned from scratch.
+This repo documents the configuration and provisioning of the Hetzner VPS that hosts `doc_app`. It contains setup scripts and hardening scripts to allow the server to be fully reprovisioned from scratch.
 
 This is **not** an application repo. Do not put application code here.
 
@@ -38,8 +38,8 @@ This is **not** an application repo. Do not put application code here.
     CLAUDE.md              ← this file
     README.md              ← minimal placeholder
 
-/opt/pcon_app/
-  app/                     ← pcon_app source code (git repo → haymanjoyce/pcon_app)
+/opt/doc_app/
+  app/                     ← doc_app source code (git repo → haymanjoyce/doc_app)
 
 /var/pcon_app/
   projects/
@@ -143,7 +143,7 @@ sudo ufw status
 
 Config: `/etc/nginx/sites-available/pcon.pro`
 
-- `/` — serves `/opt/pcon_app/app/frontend/dist/` (React static build)
+- `/` — serves `/opt/doc_app/app/frontend/dist/` (React static build)
 - `/api/` — proxied to `http://127.0.0.1:8000/api/`
 - `/api/chat/ws` — WebSocket proxied to FastAPI
 - SSL via Let's Encrypt (auto-renews via certbot timer)
@@ -157,15 +157,15 @@ sudo certbot renew --dry-run   # test cert renewal
 
 ---
 
-## pcon_app Service
+## doc_app Service
 
 Managed by systemd user service.
 
 ```bash
-systemctl --user status pcon_app
-systemctl --user restart pcon_app
-systemctl --user stop pcon_app
-journalctl --user -u pcon_app -f
+systemctl --user status doc_app
+systemctl --user restart doc_app
+systemctl --user stop doc_app
+journalctl --user -u doc_app -f
 ```
 
 ---
@@ -184,7 +184,7 @@ Recommended: snapshot before any major change.
 
 | Date | Label |
 |------|-------|
-| 2026-02-25 | Post pcon_app deployment — full stack live |
+| 2026-02-25 | Post doc_app deployment — full stack live |
 | 2026-02-25 | Post README refactor |
 | 2026-03-01 | Post repo rename (doc_app → pcon_app) and /var/pcon_app data migration |
 | 2026-03-01 | Post GitHub integration removal and CLAUDE.md cleanup |
@@ -209,7 +209,7 @@ bash /home/richard/pcon_server/setup.sh
 # 4. Run security hardening
 sudo bash /home/richard/pcon_server/harden.sh
 
-# 5. Deploy pcon_app — see /opt/pcon_app/app/CLAUDE.md
+# 5. Deploy doc_app — see /opt/doc_app/app/CLAUDE.md
 ```
 
 ---
@@ -235,7 +235,7 @@ sudo bash /home/richard/pcon_server/harden.sh
 
 ## What Claude Code Should Never Do
 
-- Modify application code in `/opt/pcon_app/app/` — that belongs to the pcon_app repo
+- Modify application code in `/opt/doc_app/app/` — that belongs to the doc_app repo
 - Touch user data in `/var/pcon_app/` — that belongs to the application
 - Delete or modify SSH keys in `/home/richard/.ssh/`
 - Disable or weaken any security hardening (fail2ban, SSH config, ufw)
@@ -251,7 +251,7 @@ sudo bash /home/richard/pcon_server/harden.sh
 - [x] tmux configured
 - [x] Claude Code installed
 - [x] Nginx configured with SSL
-- [x] pcon_app deployed and running
+- [x] doc_app deployed and running
 - [x] setup.sh complete and tested
 - [x] harden.sh complete and tested
 - [x] nginx_setup.sh complete and tested
