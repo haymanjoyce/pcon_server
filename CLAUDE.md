@@ -155,6 +155,46 @@ sudo certbot renew --dry-run   # test cert renewal
 
 ---
 
+## MCP Observer Server
+
+Read-only observer MCP server allowing claude.ai to monitor Claude Code sessions in real time.
+
+| Property | Value |
+|----------|-------|
+| Code | `/opt/logbooklm/mcp/server.py` (FastMCP) |
+| Port | 8765 (127.0.0.1 only) |
+| Public URL | `https://mcp.logbooklm.com/mcp` |
+| Tunnel | Cloudflare Tunnel `mcp-server` (ID: `f2f73de9-fcca-40ec-95ce-eee3c9d6d82e`) |
+| Auth | Bearer token — `MCP_API_KEY` in `/opt/logbooklm/mcp/.env` |
+| Session log | `/opt/logbooklm/mcp/.session_log.md` |
+
+### Services
+
+```bash
+systemctl --user status logbooklm-mcp      # FastMCP / uvicorn
+systemctl --user status cloudflared-mcp    # Cloudflare Tunnel
+journalctl --user -u logbooklm-mcp -f
+journalctl --user -u cloudflared-mcp -f
+```
+
+### Tools exposed
+
+| Tool | Description |
+|------|-------------|
+| `get_recent_commits(n)` | Last n git commits from `/opt/logbooklm/app` |
+| `get_current_diff()` | Current git diff in `/opt/logbooklm/app` |
+| `read_session_log()` | Reads `/opt/logbooklm/mcp/.session_log.md` |
+| `read_file(path)` | Reads any file under `/opt/logbooklm/` |
+| `list_files(directory)` | Lists files in a directory under `/opt/logbooklm/` |
+
+### Configuring claude.ai
+
+In claude.ai MCP settings add:
+- URL: `https://mcp.logbooklm.com/mcp`
+- Header: `Authorization: Bearer <MCP_API_KEY>`
+
+---
+
 ## LogbookLM Service
 
 Managed by systemd user service.
@@ -255,3 +295,4 @@ sudo bash /home/richard/logbooklm_server/harden.sh
 - [x] harden.sh complete and tested
 - [x] nginx_setup.sh complete and tested
 - [x] logbooklm_server repo on GitHub (haymanjoyce/logbooklm_server)
+- [x] MCP observer server deployed (FastMCP, Cloudflare Tunnel, mcp.logbooklm.com)
